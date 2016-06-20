@@ -5,11 +5,11 @@ module.exports = config => {
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
       'node_modules/sinon/pkg/sinon.js',
-      'karma.entry.js'
+      'karma.entry.js',
     ],
 
     preprocessors: {
-      'karma.entry.js': ['webpack', 'sourcemap']
+      'karma.entry.js': ['webpack', 'sourcemap'],
     },
 
     // webpack config
@@ -17,7 +17,7 @@ module.exports = config => {
 
     // webpack server config
     webpackServer: {
-      noInfo: true
+      noInfo: true,
     },
 
     reporters: ['dots'],
@@ -31,10 +31,10 @@ module.exports = config => {
     customLaunchers: {
       TRAVIS_CHROME: {
         base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
+        flags: ['--no-sandbox'],
+      },
     },
 
-    browsers: process.env.TRAVIS ? ['TRAVIS_CHROME'] : ['Chrome']
-  });
-};
+    browsers: process.env.TRAVIS ? ['TRAVIS_CHROME'] : ['Chrome'],
+  })
+}

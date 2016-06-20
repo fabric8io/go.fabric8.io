@@ -1,71 +1,71 @@
-const autoprefixer = require('autoprefixer');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-const webpack = require('webpack');
+const autoprefixer = require('autoprefixer')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
+const webpack = require('webpack')
 
 
-//=========================================================
+// =========================================================
 //  ENVIRONMENT VARS
-//---------------------------------------------------------
-const NODE_ENV = process.env.NODE_ENV;
+// ---------------------------------------------------------
+const NODE_ENV = process.env.NODE_ENV
 
-const ENV_DEVELOPMENT = NODE_ENV === 'development';
-const ENV_PRODUCTION = NODE_ENV === 'production';
-const ENV_TEST = NODE_ENV === 'test';
+const ENV_DEVELOPMENT = NODE_ENV === 'development'
+const ENV_PRODUCTION = NODE_ENV === 'production'
+const ENV_TEST = NODE_ENV === 'test'
 
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost'
+const PORT = process.env.PORT || 3000
 
 
-//=========================================================
+// =========================================================
 //  LOADERS
-//---------------------------------------------------------
+// ---------------------------------------------------------
 const loaders = {
   js: {test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
-  scss: {test: /\.scss$/, loader: 'style!css!postcss!sass'}
-};
+  scss: {test: /\.scss$/, loader: 'style!css!postcss!sass'},
+}
 
 
-//=========================================================
+// =========================================================
 //  CONFIG
-//---------------------------------------------------------
-const config = {};
-module.exports = config;
+// ---------------------------------------------------------
+const config = {}
+module.exports = config
 
 
 config.resolve = {
   extensions: ['', '.ts', '.js'],
   modulesDirectories: ['node_modules'],
-  root: path.resolve('.')
-};
+  root: path.resolve('.'),
+}
 
 config.plugins = [
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
-  })
-];
+    'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+  }),
+]
 
 config.postcss = [
-  autoprefixer({ browsers: ['last 3 versions'] })
-];
+  autoprefixer({ browsers: ['last 3 versions'] }),
+]
 
 config.sassLoader = {
   outputStyle: 'compressed',
   precision: 10,
-  sourceComments: false
-};
+  sourceComments: false,
+}
 
 
-//=====================================
+// =====================================
 //  DEVELOPMENT or PRODUCTION
-//-------------------------------------
+// -------------------------------------
 if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
-  config.devtool = 'source-map';
+  config.devtool = 'source-map'
 
   config.entry = {
     main: [
-      './src/main'
+      './src/main',
     ],
     vendor: [
       'whatwg-fetch',
@@ -75,20 +75,16 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
       'history',
       'react',
       'react-dom',
-      'react-redux',
       'react-router',
-      'react-router-redux',
-      'redux',
-      'redux-thunk',
-      'bootstrap-loader'
-    ]
-  };
+      'bootstrap-loader',
+    ],
+  }
 
   config.output = {
     filename: '[name].js',
     path: path.resolve('./dist'),
-    publicPath: '/'
-  };
+    publicPath: '/',
+  }
 
   config.plugins.push(
     new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
@@ -96,31 +92,34 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
       filename: 'index.html',
       hash: true,
       inject: 'body',
-      template: './src/index.html'
+      template: './src/index.html',
     })
-  );
+  )
 }
 
 
-//=====================================
+// =====================================
 //  DEVELOPMENT
-//-------------------------------------
+// -------------------------------------
 if (ENV_DEVELOPMENT) {
   config.entry.main.unshift(
     `webpack-dev-server/client?http://${HOST}:${PORT}`,
     'webpack/hot/dev-server'
-  );
+  )
 
   config.module = {
+    preLoaders: [
+      {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/},
+    ],
     loaders: [
       loaders.scss,
       {test: /\.js$/, exclude: /node_modules/, loader: 'babel', query: {
         plugins: [
           [
             'react-transform',
-            {transforms: [ {transform: 'react-transform-hmr', imports: ['react'], locals: ['module']} ]}
-          ]
-        ]
+            {transforms: [ {transform: 'react-transform-hmr', imports: ['react'], locals: ['module']} ]},
+          ],
+        ],
       }},
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
@@ -130,13 +129,13 @@ if (ENV_DEVELOPMENT) {
       { test: require.resolve('jquery'), loader: 'expose?$' },
 
       // Bootstrap 3
-      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' }
-    ]
-  };
+      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
+    ],
+  }
 
   config.plugins.push(
     new webpack.HotModuleReplacementPlugin()
-  );
+  )
 
   config.devServer = {
     contentBase: './src',
@@ -154,15 +153,15 @@ if (ENV_DEVELOPMENT) {
       hash: false,
       reasons: true,
       timings: true,
-      version: false
-    }
-  };
+      version: false,
+    },
+  }
 }
 
 
-//=====================================
+// =====================================
 //  PRODUCTION
-//-------------------------------------
+// -------------------------------------
 if (ENV_PRODUCTION) {
   config.module = {
     loaders: [
@@ -177,9 +176,9 @@ if (ENV_PRODUCTION) {
       { test: require.resolve('jquery'), loader: 'expose?$' },
 
       // Bootstrap 3
-      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' }
-    ]
-  };
+      { test: /bootstrap-sass\/assets\/javascripts\//, loader: 'imports?jQuery=jquery' },
+    ],
+  }
 
   config.plugins.push(
     new ExtractTextPlugin('styles.css'),
@@ -190,23 +189,23 @@ if (ENV_PRODUCTION) {
         dead_code: true, // eslint-disable-line camelcase
         screw_ie8: true, // eslint-disable-line camelcase
         unused: true,
-        warnings: false
-      }
+        warnings: false,
+      },
     })
-  );
+  )
 }
 
 
-//=====================================
+// =====================================
 //  TEST
-//-------------------------------------
+// -------------------------------------
 if (ENV_TEST) {
-  config.devtool = 'inline-source-map';
+  config.devtool = 'inline-source-map'
 
   config.module = {
     loaders: [
       loaders.js,
-      loaders.scss
-    ]
-  };
+      loaders.scss,
+    ],
+  }
 }

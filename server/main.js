@@ -1,40 +1,40 @@
-const express = require('express');
-const logger = require('winston');
+const express = require('express')
+const logger = require('winston')
 
 
-//=========================================================
+// =========================================================
 //  SETUP
-//---------------------------------------------------------
-const PROJECT_ROOT_DIR = process.cwd();
+// ---------------------------------------------------------
+const PROJECT_ROOT_DIR = process.cwd()
 
-const app = express();
+const app = express()
 
-app.set('host', process.env.HOST || 'localhost');
-app.set('port', process.env.PORT || 3000);
+app.set('host', process.env.HOST || 'localhost')
+app.set('port', process.env.PORT || 3000)
 
-app.use(require('morgan')('dev'));
-app.use(express.static(`${PROJECT_ROOT_DIR}/dist`));
+app.use(require('morgan')('dev'))
+app.use(express.static(`${PROJECT_ROOT_DIR}/dist`))
 
 
-//=========================================================
+// =========================================================
 //  ROUTER
-//---------------------------------------------------------
-const router = new express.Router();
+// ---------------------------------------------------------
+const router = new express.Router()
 
 router.get('*', (req, res) => {
-  res.sendFile(`${PROJECT_ROOT_DIR}/dist/index.html`);
-});
+  res.sendFile(`${PROJECT_ROOT_DIR}/dist/index.html`)
+})
 
-app.use(router);
+app.use(router)
 
 
-//=========================================================
+// =========================================================
 //  START SERVER
-//---------------------------------------------------------
+// ---------------------------------------------------------
 app.listen(app.get('port'), app.get('host'), error => {
   if (error) {
-    logger.error(error);
+    logger.error(error)
   } else {
-    logger.info(`Server listening @ ${app.get('host')}:${app.get('port')}`);
+    logger.info(`Server listening @ ${app.get('host')}:${app.get('port')}`)
   }
-});
+})
