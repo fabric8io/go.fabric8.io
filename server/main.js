@@ -34,8 +34,7 @@ app.use(router);
 app.listen(app.get('port'), app.get('host'), error => {
   if (error) {
     logger.error(error);
-  }
-  else {
+  } else {
     logger.info(`Server listening @ ${app.get('host')}:${app.get('port')}`);
   }
 });

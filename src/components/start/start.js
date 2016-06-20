@@ -16,6 +16,7 @@ class Start extends Component {
     this.handleManifestChange = this.handleManifestChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchManifest = this.fetchManifest.bind(this);
+    this.runCreateManifest = this.runCreateManifest.bind(this);
     this.runCreate = this.runCreate.bind(this);
   }
 
@@ -51,18 +52,24 @@ class Start extends Component {
           return yaml.safeLoad(text);
         }
       })
-      .then(this.runCreate)
+      .then(this.runCreateManifest)
       .catch(function(ex) {
         console.log('not json or yaml...', ex);
       });
   }
 
-  runCreate(manifest) {
+  runCreateManifest(manifest) {
     if (manifest.kind === 'List') {
-      manifest.items.forEach((v) => {
-        console.log(v);
+      manifest.items.forEach(v => {
+        this.runCreate(v);
       });
+    } else {
+      this.runCreate(manifest);
     }
+  }
+
+  runCreate(obj) {
+    console.log(obj);
   }
 
   render() {
