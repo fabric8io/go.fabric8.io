@@ -70,7 +70,7 @@ class Start extends Component {
   }
 
   runCreate(obj) {
-    let relUrl = '/api'
+    let relUrl = '/api';
     if (/\//.test(obj.apiVersion)) {
       relUrl += 's';
     }
@@ -79,6 +79,7 @@ class Start extends Component {
     fetch(this.state.server + relUrl, {
       method: 'POST',
       headers: {
+        'Authorization': 'Bearer ' + this.state.token,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
