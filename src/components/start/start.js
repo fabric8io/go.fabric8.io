@@ -59,6 +59,7 @@ class Start extends Component {
   }
 
   runCreateManifest(manifest) {
+    console.log(manifest);
     if (manifest.kind === 'List') {
       manifest.items.forEach(v => {
         this.runCreate(v);
@@ -69,7 +70,24 @@ class Start extends Component {
   }
 
   runCreate(obj) {
-    console.log(obj);
+    let relUrl = '/api'
+    if (/\//.test(obj.apiVersion)) {
+      relUrl += 's';
+    }
+    relUrl += '/' + obj.apiVersion + '/namespaces/'
+            + this.state.namespace + '/' + obj.kind.toLowerCase() + 's';
+    fetch(this.state.server + relUrl, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(obj)
+    }).then(response => {
+      console.log(response.json());
+    }).catch(e => {
+      console.log(e);
+    });
   }
 
   render() {
