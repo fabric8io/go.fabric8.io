@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
-
 // =========================================================
 //  ENVIRONMENT VARS
 // ---------------------------------------------------------
@@ -17,7 +16,6 @@ const ENV_TEST = NODE_ENV === 'test'
 const HOST = process.env.HOST || 'localhost'
 const PORT = process.env.PORT || 3000
 
-
 // =========================================================
 //  LOADERS
 // ---------------------------------------------------------
@@ -26,13 +24,11 @@ const loaders = {
   scss: {test: /\.scss$/, loader: 'style!css!postcss!sass'},
 }
 
-
 // =========================================================
 //  CONFIG
 // ---------------------------------------------------------
 const config = {}
 module.exports = config
-
 
 config.resolve = {
   extensions: ['', '.ts', '.js'],
@@ -55,7 +51,6 @@ config.sassLoader = {
   precision: 10,
   sourceComments: false,
 }
-
 
 // =====================================
 //  DEVELOPMENT or PRODUCTION
@@ -97,7 +92,6 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
     })
   )
 }
-
 
 // =====================================
 //  DEVELOPMENT
@@ -159,7 +153,6 @@ if (ENV_DEVELOPMENT) {
   }
 }
 
-
 // =====================================
 //  PRODUCTION
 // -------------------------------------
@@ -195,7 +188,6 @@ if (ENV_PRODUCTION) {
     })
   )
 }
-
 
 // =====================================
 //  TEST

@@ -15,7 +15,6 @@ app.set('port', process.env.PORT || 3000)
 app.use(require('morgan')('dev'))
 app.use(express.static(`${PROJECT_ROOT_DIR}/dist`))
 
-
 // =========================================================
 //  ROUTER
 // ---------------------------------------------------------
@@ -26,7 +25,6 @@ router.get('*', (req, res) => {
 })
 
 app.use(router)
-
 
 // =========================================================
 //  START SERVER

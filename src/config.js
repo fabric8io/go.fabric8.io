@@ -5,7 +5,6 @@ export const FIREBASE_CONFIG = {
   storageBucket: 'gofabric8.appspot.com',
 }
 
-
 // Route paths
 export const SIGN_IN_PATH = '/sign-in'
 export const TASKS_PATH = '/tasks'
