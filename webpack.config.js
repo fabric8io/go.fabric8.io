@@ -68,6 +68,7 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
       './src/main',
     ],
     vendor: [
+      'urijs',
       'whatwg-fetch',
       'babel-polyfill',
       'classnames',
