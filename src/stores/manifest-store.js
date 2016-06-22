@@ -1,21 +1,49 @@
 import {observable, action, computed} from 'mobx'
 import URI from 'urijs'
-import yaml from 'js-yaml'
+import yaml, {YAMLException} from 'js-yaml'
 
 class Manifest {
   @observable manifest = ''
 
-  @observable parsedManifest = null
+  @observable items = []
+
+  @observable parameters = []
 
   @observable error = null
 
   @action updateManifest = manifest => {
     this.manifest = manifest
+    this.items = []
+    this.parameters = []
     this.error = null
   }
 
+  @action updateItem = (item, responseCode) => {
+    item.responseCode = responseCode
+  }
+
   @action updateParsedManifest = parsedManifest => {
-    this.parsedManifest = parsedManifest
+    this.parameters = []
+
+    let tmp = []
+    if (parsedManifest.apiVersion && parsedManifest.kind) {
+      if (parsedManifest.kind.toLowerCase() === 'list') {
+        tmp = parsedManifest.items || []
+      } else if (parsedManifest.kind.toLowerCase() === 'template') {
+        tmp = parsedManifest.objects || []
+        this.parameters = parsedManifest.parameters || []
+      } else {
+        tmp = [parsedManifest]
+      }
+      tmp.map(i => {
+        i.responseCode = 0
+      })
+      this.items = tmp
+      return
+    }
+
+    this.items = []
+    throw Error('it doesn\'t look like a valid manifest')
   }
 
   @action updateError = error => {
@@ -53,11 +81,14 @@ class Manifest {
         } catch (e) {
           this.updateParsedManifest(yaml.safeLoad(body))
         }
-        console.log(this.parsedManifest)
       })
       .catch((e) => {
         if (e instanceof TypeError) {
           this.updateError('Cannot retrieve manifest - is it accessible?')
+          return
+        }
+        if (e instanceof YAMLException) {
+          this.updateError('Cannot parse manifest - is it correctly formed JSON or YAML?')
           return
         }
         this.updateError('Cannot retrieve manifest - ' + e.message)

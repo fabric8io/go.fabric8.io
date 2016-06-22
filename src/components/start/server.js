@@ -12,6 +12,10 @@ class Server extends React.Component {
     this.context.store.apiServer.updateServer(e.target.value)
   }
 
+  handleNamespaceChange (e) {
+    this.context.store.apiServer.updateNamespace(e.target.value)
+  }
+
   handleTokenChange (e) {
     this.context.store.apiServer.updateToken(e.target.value)
   }
@@ -32,6 +36,10 @@ class Server extends React.Component {
       <form onSubmit={this.handleSubmit} noValidate>
         <div className='row'>
           <div className='col-lg-12'>
+            <div className='callout callout-success'>
+              To get started, we need to know where you want to deploy stuff to. Please
+              enter your API server, namespace &amp; optionally your API token into the form below.
+            </div>
             <div className='form-group'>
               <label htmlFor='server'>API server address</label>
               <input type='url' className='form-control' value={apiServer.server}
@@ -39,6 +47,14 @@ class Server extends React.Component {
                 placeholder='https://api.server.com:8443 *'
                 id='server' />
               <p className='help-block'>The address of your Kubernetes or OpenShift server.</p>
+            </div>
+            <div className='form-group'>
+              <label htmlFor='namespace'>Namespace</label>
+              <input type='text' className='form-control' value={apiServer.namespace}
+                onChange={this.handleNamespaceChange}
+                placeholder='default *'
+                id='namespace' />
+              <p className='help-block'>The namespace to deploy your stuff into.</p>
             </div>
             <div className='form-group'>
               <label htmlFor='token'>Authentication token (optional)</label>
@@ -56,10 +72,10 @@ class Server extends React.Component {
                 this web page to deploy to your API server then please
                 add <a href={this.origin}>{this.origin}</a> as a valid origin.
                 <br /><br />
-                Alternatively, you can use our CORS proxy to work around this restriction, but
-                be aware that your API token (if you're using one) will be sent with your request
-                to our CORS proxy. Be assured that your token is safe: the request uses TLS and
-                your token will not be stored in any way.
+                Alternatively, if your API server is publicly accessible, you can use our CORS proxy
+                to work around this restriction, but be aware that your API token (if you're using
+                one) will be sent with your request to our CORS proxy. Be assured that your token is
+                safe: the request uses TLS and your token will not be stored in any way.
               </div>
               <label>
                 <input type='checkbox' value={apiServer.useProxy}

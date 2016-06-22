@@ -16,12 +16,19 @@ class Manifest extends React.Component {
   }
 
   render () {
-    const { manifest } = this.context.store
+    const { apiServer, manifest } = this.context.store
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         <div className='row'>
           <div className='col-lg-12'>
+            <div className='callout callout-success'>
+              So now we've validated we can connect to your API server
+              at <a href={apiServer.server}>{apiServer.server}</a>,
+              we need to know what you want to deploy. Enter the address of a manifest that
+              you want to load. On the next page you will be able to review what is going to
+              be created before we do anything.
+            </div>
             <div className='form-group'>
               <label htmlFor='manifest'>Manifest address</label>
               <input type='url' className='form-control' value={manifest.manifest}
