@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import Server from './server'
 import Manifest from './manifest'
 import Deploy from './deploy'
+import Parameters from './parameters'
 
 @autobind
 @connect
@@ -24,9 +25,14 @@ class Start extends React.Component {
       'hidden': !apiServer.isValidated || manifest.items.length > 0,
     })
 
+    let parametersClass = classNames({
+      'col-lg-12': true,
+      'hidden': !apiServer.isValidated || manifest.isParametersValid,
+    })
+
     let deployClass = classNames({
       'col-lg-12': true,
-      'hidden': !apiServer.isValidated || manifest.items.length === 0,
+      'hidden': !apiServer.isValidated || manifest.items.length === 0 || !manifest.isParametersValid,
     })
 
     return (
@@ -43,6 +49,9 @@ class Start extends React.Component {
             </div>
             <div className={manifestClass}>
               <Manifest />
+            </div>
+            <div className={parametersClass}>
+              <Parameters />
             </div>
             <div className={deployClass}>
               <Deploy />

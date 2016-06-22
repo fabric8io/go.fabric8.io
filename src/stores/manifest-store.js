@@ -9,6 +9,8 @@ class Manifest {
 
   @observable parameters = []
 
+  @observable parametersCompleted = false
+
   @observable error = null
 
   @action updateManifest = manifest => {
@@ -20,6 +22,10 @@ class Manifest {
 
   @action updateItem = (item, responseCode) => {
     item.responseCode = responseCode
+  }
+
+  @action updateParametersCompleted = (b) => {
+    this.parametersCompleted = b
   }
 
   @action updateParsedManifest = parsedManifest => {
@@ -59,6 +65,22 @@ class Manifest {
       this.manifestURL.is('absolute')
   }
 
+  @computed get isParametersValid () {
+    if (this.parameters.length === 0) {
+      return true
+    }
+    if (!this.parametersCompleted) {
+      return false
+    }
+    this.parameters.forEach((p) => {
+      if (p.required && !p.value) {
+        this.updateParametersCompleted(false)
+        return false
+      }
+    })
+    return this.parametersCompleted
+  }
+
   handleErrors = (response) => {
     if (!response.ok) {
       throw Error(response.statusText)
@@ -93,6 +115,14 @@ class Manifest {
         }
         this.updateError('Cannot retrieve manifest - ' + e.message)
       })
+  }
+
+  processItem = (item) => {
+    let processed = JSON.stringify(item)
+    this.parameters.forEach((p) => {
+      processed = processed.replace(new RegExp('\\${' + p.name + '}', 'gi'), p.value)
+    })
+    return JSON.parse(processed)
   }
 }
 

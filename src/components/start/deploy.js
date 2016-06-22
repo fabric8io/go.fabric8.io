@@ -9,7 +9,8 @@ class Deploy extends React.Component {
   handleSubmit (e) {
     e.preventDefault()
     this.context.store.manifest.items.map(async (x) => {
-      const status = await this.context.store.apiServer.createItem(x)
+      const processed = this.context.store.manifest.processItem(x)
+      const status = await this.context.store.apiServer.createItem(processed)
       this.context.store.manifest.updateItem(x, status)
     })
   }
