@@ -56,6 +56,13 @@ class Manifest {
     this.error = error
   }
 
+  @action updateParameterValue = (name, value) => {
+    const param = this.parameters.find((p) => { return p.name === name })
+    if (param) {
+      param.value = value
+    }
+  }
+
   @computed get manifestURL () {
     return URI(this.manifest)
   }
@@ -66,19 +73,20 @@ class Manifest {
   }
 
   @computed get isParametersValid () {
+    let parametersCompleted = this.parametersCompleted
     if (this.parameters.length === 0) {
       return true
     }
-    if (!this.parametersCompleted) {
+    if (!parametersCompleted) {
       return false
     }
     this.parameters.forEach((p) => {
       if (p.required && !p.value) {
-        this.updateParametersCompleted(false)
+        parametersCompleted = false
         return false
       }
     })
-    return this.parametersCompleted
+    return parametersCompleted
   }
 
   handleErrors = (response) => {

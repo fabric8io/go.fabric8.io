@@ -6,6 +6,12 @@ import { connect } from 'mobx-connect'
 @connect
 class Parameters extends React.Component {
 
+  handleParamChange (e) {
+    const paramName = e.target.id
+    const paramValue = e.target.value
+    this.context.store.manifest.updateParameterValue(paramName, paramValue)
+  }
+
   handleSubmit (e) {
     e.preventDefault()
     this.context.store.manifest.updateParametersCompleted(true)
@@ -23,12 +29,12 @@ class Parameters extends React.Component {
               when you're ready, just click the button.
             </div>
             {manifest.parameters.map((p) =>
-              <div className='form-group'>
+              <div key={'param-' + p.name} className='form-group'>
                 <label htmlFor={'param-' + p.name}>{p.displayName || p.name}</label>
                 <input type='text' className='form-control' value={p.value}
                   onChange={this.handleParamChange}
                   placeholder='Your value'
-                  id={'param-' + p.name} />
+                  id={p.name} />
                 <p className='help-block'>{p.description}</p>
               </div>
             )}
